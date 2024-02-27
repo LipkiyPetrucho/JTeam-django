@@ -40,7 +40,7 @@ INSTALLED_APPS = [
 
     # packages install
     'social_django',
-    'django_extensions',
+    # 'django_extensions',
     'crispy_forms',
     'crispy_bootstrap5',
 
