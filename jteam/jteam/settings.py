@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     # 'django_extensions',
     'crispy_forms',
     'crispy_bootstrap5',
+    'fontawesomefree',
 
     # мои приложения
     'account.apps.AccountConfig',
@@ -177,3 +178,17 @@ SOCIAL_AUTH_PIPELINE = [
 
 # В случае использования Chromebook
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
+
+# django-crispy-forms
+# https://django-crispy-forms.readthedocs.io/en/latest/install.html
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+
+CRISPY_TEMPLATE_PACK = "bootstrap5"
+#CRISPY_TEMPLATE_PACK = 'bootstrap4'
+#CRISPY_TEMPLATE_PACK = 'uni_form'
+
+# End django-crispy-forms
+
+STATIC_ROOT = os.path.join(BASE_DIR, '/account/static')
+

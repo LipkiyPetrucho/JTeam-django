@@ -1,0 +1,8 @@
+{% for game in games %}
+    <div class="info">
+        <a href="{{ game.get_absolute_url }}">
+            {{ game.sport }}
+        </a>
+    </div>
+{% endfor %}
+

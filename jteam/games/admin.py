@@ -5,5 +5,6 @@ from .models import Game
 
 @admin.register(Game)
 class GameAdmin(admin.ModelAdmin):
-    list_display = ['sport', 'amount_players', 'place', 'created_date']
-    list_filter = ['created_date']
+    """field for admin"""
+    list_display = ['sport', 'max_players', 'place', 'created_at']
+    list_filter = ['created_at']
