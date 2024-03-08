@@ -6,9 +6,9 @@ urlpatterns = [
     # previous url of log-in
     #path('login/', views.user_login, name='login'),
 
-    # url-adresses of login and logout
-    path('login/', auth_views.LoginView.as_view(), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    #url-adresses of login and logout
+    # path('login/', auth_views.LoginView.as_view(), name='login'),
+    # path('logout/', auth_views.LogoutView.as_view(), name='logout'),
 
 
     #url-adresses for parol change

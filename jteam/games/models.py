@@ -32,7 +32,7 @@ class Game(models.Model):
                                             blank=True)
     status = models.CharField(max_length=255,
                               choices=CHOICES, default='Open')
-    slug = models.SlugField(max_length=200,)
+    slug = models.SlugField(max_length=200, unique=True)
 
     class Meta:
         """
@@ -64,7 +64,7 @@ class Game(models.Model):
         if not self.slug:
             self.slug = slugify(self.sport, allow_unicode=True) + '-' + \
                         slugify(self.date, allow_unicode=True) + '-' + \
-                        slugify(self.place, allow_unicode=True)
+                        slugify(self.user, allow_unicode=True)
         super().save(*args, **kwargs)
 
     def get_absolute_url(self):

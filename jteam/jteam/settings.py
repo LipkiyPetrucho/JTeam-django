@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 import os
 from pathlib import Path
+from django.utils.translation import gettext_lazy as _
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -48,6 +49,7 @@ INSTALLED_APPS = [
     # мои приложения
     'account.apps.AccountConfig',
     'games.apps.GamesConfig',
+
 ]
 
 MIDDLEWARE = [
@@ -116,7 +118,13 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
-LANGUAGE_CODE = 'ru-ru'
+LANGUAGES = [
+    ('en', _('English')),
+    ('ru', _('Russian')),
+]
+
+LANGUAGE_CODE = 'en-us'
+# LANGUAGE_CODE = 'ru-ru'
 
 TIME_ZONE = 'Europe/Samara'
 
@@ -145,6 +153,7 @@ LOGOUT_URL = 'logout'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
@@ -185,10 +194,9 @@ MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 
 CRISPY_TEMPLATE_PACK = "bootstrap5"
-#CRISPY_TEMPLATE_PACK = 'bootstrap4'
-#CRISPY_TEMPLATE_PACK = 'uni_form'
+# CRISPY_TEMPLATE_PACK = 'bootstrap4'
+# CRISPY_TEMPLATE_PACK = 'uni_form'
 
 # End django-crispy-forms
 
 STATIC_ROOT = os.path.join(BASE_DIR, '/account/static')
-

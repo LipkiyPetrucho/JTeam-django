@@ -81,6 +81,12 @@ def game_join(request):
         try:
             game = Game.objects.get(id=game_id)
             if action == 'join':
+                # Проверяет лимит присоединений
+                if game.joined_players.count() >= game.max_players:
+                    messages.error(request,
+                                     'Максимальное количество игроков достигнуто.')
+                    return JsonResponse({'status': 'error',
+                                         'message': 'Максимальное количество игроков достигнуто.'})
                 # Добавление пользователя в игру
                 game.joined_players.add(request.user)
             else:

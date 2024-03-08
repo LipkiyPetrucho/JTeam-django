@@ -1,7 +1,10 @@
 {% for game in games %}
     <div class="info">
         <a href="{{ game.get_absolute_url }}">
-            {{ game.sport }}
+            {{ game.get_sport_display }}&nbsp;&nbsp;&nbsp;
+            <b>Дата:</b> &nbsp; {{ game.date }}&nbsp;&nbsp;&nbsp;
+            <i class="fas fa-clock"></i> {{ game.start_time }}&nbsp;&nbsp;&nbsp;
+            <b>Место:</b> &nbsp; {{ game.place }}
         </a>
     </div>
 {% endfor %}
