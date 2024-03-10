@@ -11,6 +11,10 @@ class Game(models.Model):
         ('football', 'футбол'),
         ('tennis', 'теннис'),
         ('bowling', 'боулинг'),
+        ('beach volleyball', 'пляжный волейбол'),
+        ('volleyball', 'волейбол'),
+        ('ice hockey', 'хоккей на льду'),
+        ('volleyball', 'волейбол'),
     )
     CHOICES = (("open", "Open"), ("started", "Started"), ("finished", "Finished"))
 
@@ -32,7 +36,7 @@ class Game(models.Model):
                                             blank=True)
     status = models.CharField(max_length=255,
                               choices=CHOICES, default='Open')
-    slug = models.SlugField(max_length=200, unique=True)
+    slug = models.SlugField(max_length=200)
 
     class Meta:
         """
@@ -49,9 +53,9 @@ class Game(models.Model):
         verbose_name = 'Игра'
         verbose_name_plural = 'Игры'
         indexes = [
-            models.Index(fields=['-created_at']),
+            models.Index(fields=['created_at']),
         ]
-        ordering = ['-created_at']
+        ordering = ['created_at']
 
     def __str__(self):
         return f'{self.sport} {self.date} {self.start_time} {self.place}'
@@ -64,6 +68,7 @@ class Game(models.Model):
         if not self.slug:
             self.slug = slugify(self.sport, allow_unicode=True) + '-' + \
                         slugify(self.date, allow_unicode=True) + '-' + \
+                        slugify(self.created_at, allow_unicode=True) + '-' + \
                         slugify(self.user, allow_unicode=True)
         super().save(*args, **kwargs)
 
@@ -81,21 +86,3 @@ class Game(models.Model):
     # views.py:
     # Обработка запроса на вступление в игру.
     # Отображение списка доступных игр.
-
-# class Contact(models.Model):
-#     user_from = models.ForeignKey('auth.User',
-#                                   related_name='rel_from_set',
-#                                   on_delete=models.CASCADE)
-#     game_to = models.ForeignKey(Game,
-#                                 related_name='rel_to_set',
-#                                 on_delete=models.CASCADE)
-#     created = models.DateTimeField(auto_now_add=True)
-#
-#     class Meta:
-#         indexes = [
-#             models.Index(fields=['-created']),
-#         ]
-#         ordering = ['-created']
-#
-#     def __str__(self):
-#         return f'{self.user_from} joined {self.game_to}'

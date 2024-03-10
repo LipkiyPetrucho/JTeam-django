@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 import os
 from pathlib import Path
+
+from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -25,6 +27,8 @@ SECRET_KEY = 'django-insecure-sku+b_boiars%++kx_=(69uo+n#@qz1@l))!0n%i@z+=p+e0yv
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+# настроечный параметр для получения отладочной информации генерируемых миниатюр.
+THUMBNAIL_DEBUG = True
 
 ALLOWED_HOSTS = ['mysite.com', 'localhost', '127.0.0.1', '.jteam.ru']
 
@@ -45,10 +49,12 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_bootstrap5',
     'fontawesomefree',
+    'easy_thumbnails',
 
     # мои приложения
     'account.apps.AccountConfig',
     'games.apps.GamesConfig',
+    'actions.apps.ActionsConfig',
 
 ]
 
@@ -200,3 +206,10 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 # End django-crispy-forms
 
 STATIC_ROOT = os.path.join(BASE_DIR, '/account/static')
+
+# Для указания URL-адреса для модели добавляем в проект настроечный параметр
+ABSOLUTE_URL_OVERRIDES = {
+    'auth.user': lambda u: reverse_lazy('user_detail',
+                                        args=[u.username])
+}
+# end ABSOLUTE_URL_OVERRIDES

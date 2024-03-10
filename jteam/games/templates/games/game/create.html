@@ -6,8 +6,12 @@
 {% block content %}
   <h1> Создать игру </h1>
     <form method="post">
-        {% csrf_token %}
-        {{ form|crispy }}
-    <button type="submit" class="btn btn-primary">Создать</button>
+        <div class="createGame">
+            {% csrf_token %}
+            {{ form|crispy }}
+        </div>
+        <div class="createGameButton">
+            <input class="btn btn-primary" type="submit" value="Создать игру">
+        </div>
     </form>
 {% endblock %}

@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from django.views.decorators.http import require_POST
@@ -51,18 +51,28 @@ def game_detail(request, id, slug):
 def game_list(request):
     """Выводит постраничный список игр"""
     games = Game.objects.all()
-    paginator = Paginator(games, 3)
-    page_number = request.GET.get('page', 1)
+    paginator = Paginator(games, 12)
+    page = request.GET.get('page')
+    games_only = request.GET.get('games_only')
     try:
-        games = paginator.page(page_number)
+        games = paginator.page(page)
     except PageNotAnInteger:
         # Если page_number не целое число, то
         # выдать первую страницу
         games = paginator.page(1)
     except EmptyPage:
-        # Если page_number находится вне диапозона, то
-        # выдать последнюю страницу результатов
+        if games_only:
+            # Если AJAX-запрос и страница вне диапазона,
+            # то вернуть пустую страницу
+            return HttpResponse('')
+        # Если страница вне диапазона,
+        # то вернуть последнюю страницу результатов
         games = paginator.page(paginator.num_pages)
+    if games_only:
+        return render(request,
+                      'games/game/list_games.html',
+                      {"section": 'games',
+                       'games': games})
     return render(request,
                   'games/game/list.html',
                   {"section": 'games',

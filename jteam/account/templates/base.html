@@ -18,7 +18,7 @@
 </head>
 <body>
     <div id="header">
-        <span class="logo">JTeam</span>
+        <span class="logo"><a href="{% url 'dashboard' %}">JTeam</a></span>
         {% if request.user.is_authenticated %}
             <ul class="menu">
                 <li {% if section == 'dashboard' %} class='selected'{% endif %}>
@@ -28,7 +28,7 @@
                     <a href="{% url 'games:list' %}">Список игр</a>
                 </li>
                 <li {% if section == "people" %}class="selected"{% endif %}>
-                    <a href="#">People</a>
+                    <a href="{% url 'user_list' %}">Игроки</a>
                 </li>
             </ul>
         {% endif %}

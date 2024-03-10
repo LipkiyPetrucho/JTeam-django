@@ -45,7 +45,7 @@ ol {
 }
 
 #header .logo {
-    font-family: 'Muli', sans-serif;
+    font-family: 'Mulish', sans-serif;
     float:left;
     color:#f3f7cc;
     font-size:20px;
@@ -239,14 +239,18 @@ a.like, a.follow { float:right; margin-top:-8px; }
 
 /* users */
 #people-list img {
-    width:180px;
-    height:180px;
+    width:80px;
+    height:80px;
     border-radius:50%;
     margin-bottom:20px;
+    margin-right: 10px;
 }
 #people-list .user {
-    width:180px;
-    float:left;
+    width:200px;
+    /*float:left; */
+    display: flex;
+    align-items: center;
+
     overflow:auto;
     padding:10px;
 }
@@ -287,6 +291,39 @@ img.user-detail {
 .form-control {
     box-sizing: content-box;
 }
+
+.createGame {
+   margin-bottom: 0px;
+   margin-top: 20px;
+   margin-left: 20px;
+   margin-right: 20px;
+}
+.createGameButton {
+   margin-bottom: 60px;
+   margin-top: 20px;
+   margin-left: 20px;
+   margin-right: 20px;
+}
+
+#game-list { overflow:hidden; }
+#game-list .game {
+    float:left;
+    width:220px;
+    height:300px;
+    margin:0 10px 10px 10px;
+    border-top:8px solid #12c064;
+    background:#eee;
+}
+#game-list img { width:220px; height:220px; }
+#game-list .info { padding:10px; }
+#game-list .info a { color:#333; }
+.game-likes div {
+    float:left;
+    width:auto;
+    padding:10px;
+    text-align:center;
+}
+
 
 .createGame {
    margin-bottom: 0px;
