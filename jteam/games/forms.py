@@ -1,5 +1,5 @@
 from django import forms
-from django.forms import Select, TextInput, NumberInput, Textarea
+from django.forms import Select, TextInput, NumberInput, Textarea, ClearableFileInput
 
 from .models import Game
 
@@ -21,6 +21,7 @@ class GameCreateForm(forms.ModelForm):
             'max_players',
             'price',
             'description',
+            'image',
         ]
         labels = {
             'sport': 'Вид спорта',
@@ -31,6 +32,7 @@ class GameCreateForm(forms.ModelForm):
             'max_players': 'Количество игроков',
             'price': 'Цена игры',
             'description': 'Описание',
+            'image': 'Обложка',
         }
 
         widgets = {
@@ -68,4 +70,8 @@ class GameCreateForm(forms.ModelForm):
                                          'type': 'time',
                                          'class': 'form-control form-control-width',
                                          'style': 'background-color: #f8f9fa; border-radius: 5px;'}),
+            'image': ClearableFileInput(attrs={
+                'class': 'form-control form-control-width',
+                'style': 'background-color: #f8f9fa; border-radius: 5px;',
+            })
         }

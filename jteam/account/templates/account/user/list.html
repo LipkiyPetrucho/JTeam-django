@@ -1,15 +1,18 @@
 {% extends "base.html" %}
 {% load static %}
 {% load thumbnail %}
+{% load crispy_forms_tags %}
 
 {% block title %}People{% endblock %}
 
 {% block content %}
  <h1>Игроки</h1>
+ {% include 'account/user/search.html' %}
   <div id="people-list">
     {% for user in users %}
       <div class="user">
         <a href="{{ user.get_absolute_url }}">
+
              {% if user.profile.photo %}
 <!--                {# миниатюра фотографии #}-->
                 <img src="{% thumbnail user.profile.photo 220x220 %}">
@@ -20,7 +23,7 @@
         </a>
         <div class="info">
           <a href="{{ user.get_absolute_url }}" class="title">
-            {{ user.get_full_name }}
+            {{ user.get_full_name }} <p>{{ user.username }}</p>
           </a>
         </div>
       </div>

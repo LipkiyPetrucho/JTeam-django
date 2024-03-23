@@ -14,8 +14,15 @@ class Game(models.Model):
         ('beach volleyball', 'пляжный волейбол'),
         ('volleyball', 'волейбол'),
         ('ice hockey', 'хоккей на льду'),
-        ('volleyball', 'волейбол'),
+        ('chess', 'шахматы'),
     )
+    SPORT_ICONS = {
+        'football': 'football-icon.png',
+        'tennis': 'tennis-icon.png',
+        'ice hockey': 'hockey-icon.png',
+        # Добавьте другие виды спорта и соответствующие иконки
+    }
+
     CHOICES = (("open", "Open"), ("started", "Started"), ("finished", "Finished"))
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
@@ -37,6 +44,8 @@ class Game(models.Model):
     status = models.CharField(max_length=255,
                               choices=CHOICES, default='Open')
     slug = models.SlugField(max_length=200)
+    image = models.ImageField(upload_to='images/%Y/%m/%d',
+                              blank=True)
 
     class Meta:
         """

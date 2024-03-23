@@ -9,4 +9,5 @@ urlpatterns = [
          views.game_detail, name='detail'),
     path('join/', views.game_join, name='join'),
     path('', views.game_list, name='list'),
+    path('ranking/', views.game_ranking, name='ranking'),
 ]

@@ -45,3 +45,13 @@ class ProfileEditForm(forms.ModelForm):
         model = Profile
         fields = ['date_of_birth', 'photo']
 
+
+# возможность вводить поисковые запросы
+class SearchForm(forms.Form):
+    query = forms.CharField(label='',
+                            max_length=100,
+                            widget=forms.TextInput(attrs={
+                                'placeholder': 'Введите имя игрока',
+                                'class': 'form-control form-control-width',
+                                'style': 'background-color: #f8f9fa; border-radius: 5px;',
+                            }))

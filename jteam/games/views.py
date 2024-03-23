@@ -1,3 +1,5 @@
+import redis
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
@@ -6,9 +8,11 @@ from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from django.views.decorators.http import require_POST
+from actions.utils import create_action
 
 from .forms import GameCreateForm
 from .models import Game
+
 
 def validate_date(value):
     if value < timezone.now().date():
@@ -29,6 +33,7 @@ def game_create(request):
             new_game = form.save(commit=False)
             new_game.user = request.user
             new_game.save()
+            create_action(request.user, 'создал(а) игру', new_game)
             messages.success(request,
                              'Игра успешно создана')
             return redirect(new_game.get_absolute_url())
@@ -42,10 +47,17 @@ def game_create(request):
 
 def game_detail(request, id, slug):
     game = get_object_or_404(Game, id=id, slug=slug)
+    # увеличить общее число просмотров игр на 1
+    # пространство имен формат object-type:id:field
+    total_views = r.incr(f'game:{game.id}:views')
+    # увеличить рейтинг игр на 1
+    # создаём сортированное множество
+    r.zincrby('game_ranking', 1, game.id)
     return render(request,
                   'games/game/detail.html',
                   {'section': 'games',
-                   'game': game})
+                   'game': game,
+                   'total_views': total_views})
 
 @login_required
 def game_list(request):
@@ -99,9 +111,34 @@ def game_join(request):
                                          'message': 'Максимальное количество игроков достигнуто.'})
                 # Добавление пользователя в игру
                 game.joined_players.add(request.user)
+                create_action(request.user, 'присоединился(ась) к игре', game)
             else:
                 game.joined_players.remove(request.user)
             return JsonResponse({'status': 'ok'})
         except Game.DoesNotExist:
             pass
     return JsonResponse({'status': 'error'})
+
+
+# соединить с redis
+r = redis.Redis(host=settings.REDIS_HOST,
+                port=settings.REDIS_PORT,
+                db=settings.REDIS_DB)
+
+
+@login_required
+def game_ranking(request):
+
+    # получить словарь рейтинга игр
+    # Для получения элементов сортированного множества game_ranking исползьуеться zrange()
+    game_ranking = r.zrange('game_ranking', 0, -1, desc=True)[:10]
+    game_ranking_ids = [int(id) for id in game_ranking]
+
+    # получить наиболее просматриваемые изображения
+    most_viewed = list(Game. objects.filter(
+                            id__in=game_ranking_ids))
+    most_viewed.sort(key=lambda x: game_ranking_ids.index(x.id))
+    return render(request,
+                  'games/game/ranking.html',
+                  {'section': 'games',
+                   'most_viewed': most_viewed})

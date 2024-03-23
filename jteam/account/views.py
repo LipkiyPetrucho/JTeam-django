@@ -5,10 +5,12 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.views.decorators.http import require_POST
-
 from .forms import LoginForm, UserRegistrationForm, \
-                   UserEditForm, ProfileEditForm
+    UserEditForm, ProfileEditForm, SearchForm
 from .models import Profile, Contact
+from actions.utils import create_action
+from actions.models import Action
+from .service import search_users
 
 
 def user_login(request):
@@ -34,9 +36,26 @@ def user_login(request):
 
 @login_required
 def dashboard(request):
+    # По умолчанию показать все действия
+    actions = Action.objects.exclude(user=request.user)
+    following_ids = request.user.following.values_list('id',
+                                                       flat=True)
+    if following_ids:
+        # Если пользователь подписан на других, то извлечь только их действия
+        # Здесь user_id__in используется для фильтрации объектов по значению поля user_id.
+        # Например, MyModel.objects.filter(user_id__in=[1, 2, 3]) вернет объекты,
+        # у которых user_id равен 1, 2 или 3.
+        actions = actions.filter(user_id__in=following_ids)
+
+    # В Django, двойное подчеркивание (__) используется для обращения к связанным полям
+    # в моделях. В данном случае, user__profile означает, что мы обращаемся к полю profile,
+    # связанному с полем user в модели.
+    actions = actions.select_related('user', 'user__profile')[:10]\
+                     .prefetch_related('target')[:10]
     return render(request,
                   'account/dashboard.html',
-                  {'section': 'dashboard'})
+                  {'section': 'dashboard',
+                   'actions': actions})
 
 
 def register(request):
@@ -53,6 +72,7 @@ def register(request):
             new_user.save()
             # Создать профиль пользователя
             Profile.objects.create(user=new_user)
+            create_action(new_user, 'создал(а) учётную запись')
             return render(request, 'account/register_done.html',
                           {'new_user': new_user})
     else:
@@ -63,6 +83,7 @@ def register(request):
 
 @login_required
 def edit(request):
+    """Обрабатывает редактирование профиля пользователя."""
     if request.method == 'POST':
         user_form = UserEditForm(instance=request.user,
                                  data=request.POST)
@@ -92,7 +113,8 @@ def user_list(request):
     return render(request,
                   'account/user/list.html',
                   {'section': 'people',
-                   'users': users})
+                   'users': users,
+                   'form': SearchForm()})
 
 
 @login_required
@@ -109,6 +131,7 @@ def user_detail(request, username):
 @require_POST
 @login_required
 def user_follow(request):
+    """Выводит страницу пользователя или 404, если не найден."""
     user_id = request.POST.get('id')
     action = request.POST.get('action')
     if user_id and action:
@@ -118,6 +141,7 @@ def user_follow(request):
                 Contact.objects.get_or_create(
                    user_from=request.user,
                    user_to=user)
+                create_action(request.user, 'подписался(ась) на', user)
             else:
                 Contact.objects.filter(user_from=request.user,
                                        user_to=user).delete()
@@ -125,3 +149,20 @@ def user_follow(request):
         except User.DoesNotExist:
             return JsonResponse({'status': 'error'})
     return JsonResponse({'status': 'error'})
+
+
+def account_search(request):
+    """ Поиск игрока по нику, имени и фамилии"""
+    form = SearchForm()
+    query = None
+    results = []
+    if 'query' in request.GET:
+        form = SearchForm(request.GET)
+        if form.is_valid():
+            query = form.cleaned_data['query']
+            results = search_users(query)
+    return render(request,
+                  'account/user/search_results.html',
+                  {'form': form,
+                   'query': query,
+                   'results': results})

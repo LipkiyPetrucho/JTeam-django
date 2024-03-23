@@ -337,3 +337,27 @@ img.user-detail {
    margin-left: 20px;
    margin-right: 20px;
 }
+
+/* подчёркнутый тексте */
+.underline {
+    text-decoration: underline;
+}
+/* Дополнительные стили для формы */
+.form-inline .form-group {
+    margin-bottom: 0; /* Убираем отступ снизу для формы в строке */
+}
+/* Дополнительные стили для кнопки */
+.btn-custom {
+    background-color: #007bff; /* Цвет фона */
+    border-color: #007bff; /* Цвет границы */
+    color: #fff; /* Цвет текста */
+    border-radius: 5px; /* Скругление углов */
+    padding: 8px 16px; /* Внутренние отступы */
+    font-size: 16px; /* Размер шрифта */
+}
+
+.btn-custom:hover {
+    background-color: #0056b3; /* Цвет фона при наведении */
+    border-color: #0056b3; /* Цвет границы при наведении */
+    color: #fff; /* Цвет текста при наведении */
+}

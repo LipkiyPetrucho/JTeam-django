@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.postgres',
 
     # packages install
     'social_django',
@@ -50,6 +51,8 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
     'fontawesomefree',
     'easy_thumbnails',
+    'debug_toolbar',
+    'bootstrap5',
 
     # мои приложения
     'account.apps.AccountConfig',
@@ -59,6 +62,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -96,8 +100,10 @@ WSGI_APPLICATION = 'jteam.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'jteam',
+        'USER': 'jteam',
+        'PASSWORD': 'pifpaf',
     }
 }
 
@@ -213,3 +219,14 @@ ABSOLUTE_URL_OVERRIDES = {
                                         args=[u.username])
 }
 # end ABSOLUTE_URL_OVERRIDES
+
+# debug_toolbar
+INTERNAL_IPS = [
+ '127.0.0.1', 'localhost', '.jteam.ru'
+ ]
+# end debug_toolbar
+
+# db redis
+REDIS_HOST = 'localhost'
+REDIS_PORT = 6379
+REDIS_DB = 0

@@ -1,27 +1,38 @@
 {% extends "base.html" %}
+{% load thumbnail %}
 
 {% block title %}{{ game.sport }} | {{ user.username }}{% endblock %}
 
 {% block content %}
 
-    <h1>{{ game.get_sport_display }}</h1>
+    <h1>{{ game.get_sport_display }}
+        <p>{% if game.image %}
+          {% thumbnail game.image "100x100" crop="100%" as cover %}
+            <img src="{{ cover.url }}" class="item-img">
+        {% endif %}
+        </p>
+    </h1>
         <p>{{ user.first_name }} - {{ user.email }}</p>
         <p>
-            <strong>Дата:</strong> {{ game.date }}&nbsp;&nbsp;&nbsp;
+            <i class="fas fa-calendar"></i> {{ game.date }}&nbsp;&nbsp;&nbsp;
             <i class="fas fa-clock"></i> {{ game.start_time }}&nbsp;&nbsp;&nbsp;
-            <strong>Место:</strong> {{ game.place }}
+            <i class="fas fa-map-marker"></i> {{ game.place }}
         </p>
     <p>{{ game.description }}</p>
 
     <p>
-      <strong>Цена:</strong> {{ game.price }}
+      <i class="fas fa-coins"></i> {{ game.price }}
     </p>
 
     {% with total_jones=game.joined_players.count joined_players=game.joined_players.all %}
     <div>
-        <p> Количество игроков:
+        <p><i class="fas fa-users"></i>
         <span class="count">
             {{ total_jones }} / {{ game.max_players }}
+        </span></p>
+        <p> <i class="fas fa-eye"></i>
+        <span class="count">
+            {{ total_views }} view{{ total_views|pluralize }}
         </span></p>
         <a href="#" data-id="{{ game.id }}"
            data-action="{% if request.user in joined_players %}un{% endif %}join"
@@ -37,12 +48,17 @@
         <div class="image-likes">
             {% for user in joined_players %}
                 <div>
+                    {% if user.profile.photo %}
+                        {% thumbnail user.profile.photo "80x80" crop="100%" as im %}
+                        <img src="{{ im.url }}" class="item-img">
+                    {% endif %}
                     <p>{{ user.first_name }}</p>
                 </div>
             {% empty %}
                 Nobody players joined
             {% endfor %}
         </div>
+
     {% endwith %}
 {% endblock %}
 
