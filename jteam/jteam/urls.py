@@ -9,6 +9,9 @@ urlpatterns = [
     path('social-auth/', include('social_django.urls', namespace='social')),
     path('games/', include('games.urls', namespace='games')),
     path('__debug__/', include('debug_toolbar.urls')),
+    path('cart/', include('cart.urls', namespace='cart')),
+    path('orders/', include('orders.urls', namespace='orders')),
+    path('location/', include('location.urls', namespace='location')),
 ]
 
 if settings.DEBUG:

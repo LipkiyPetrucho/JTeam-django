@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+ {{ place.name }}
+{% endblock %}
+{% block content %}
+    <div class="product-detail">
+        <img src="{% if place.image %}{{ place.image.url }}{% else %}
+        {% static 'image/png/no_image.png' %}{% endif %}">
+        <h1>{{ place.name }}</h1>
+        <h2>
+            <a href="{{ place.city.get_absolute_url }}">
+                {{ place.city }}
+            </a>
+        </h2>
+        <p class="price">₽{{ place.price }}</p>
+        <form action="{% url 'cart:cart_add' place.id %}" method="post">
+            {{ cart_place_form }}
+            {% csrf_token %}
+            <input type="submit" value="Add to cart">
+        </form>
+        {{ place.description|linebreaks }}
+    </div>
+{% endblock %}

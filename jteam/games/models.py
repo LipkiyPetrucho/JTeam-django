@@ -70,9 +70,8 @@ class Game(models.Model):
         return f'{self.sport} {self.date} {self.start_time} {self.place}'
 
     def save(self, *args, **kwargs):
-        """
-            Сохраняет игру.
-            Если слаг не задан, генерирует его из названия вида спорта, даты и места.
+        """Сохраняет игру.
+        Если слаг не задан, генерирует его из названия вида спорта, даты и места.
         """
         if not self.slug:
             self.slug = slugify(self.sport, allow_unicode=True) + '-' + \
@@ -82,10 +81,9 @@ class Game(models.Model):
         super().save(*args, **kwargs)
 
     def get_absolute_url(self):
-        """
-            Возвращает URL-адрес страницы детального отображения игры.
-        """
+        """Возвращает URL-адрес страницы детального отображения игры."""
         return reverse('games:detail', args=[self.id, self.slug])
+
     # ...Можно добавить проверку на существование игры перед генерацией URL-адреса.
 
     # models.py:

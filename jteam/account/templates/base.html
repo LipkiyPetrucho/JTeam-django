@@ -10,7 +10,7 @@
     {% bootstrap_css %}
     {% bootstrap_javascript %}
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
-
+    <link rel="shortcut icon" href="{% static 'image/jpeg/logo_jteam_ico.ico' %}" type="image/x-icon"/>
     <!-- icons with fontawesomefree -->
     <script src="{% static 'fontawesomefree/js/fontawesome.js' %}"></script>
     <script src="{% static 'fontawesomefree/js/solid.js' %}"></script>
@@ -31,6 +31,24 @@
                 </li>
                 <li {% if section == "people" %}class="selected"{% endif %}>
                     <a href="{% url 'user_list' %}">Игроки</a>
+                </li>
+                <li {% if section == "location" %} class="selected"{% endif %}>
+                    <a href="{% url 'location:list' %}">Список мест</a>
+                </li>
+                <li {% if section == "cart" %} class="selected"{% endif %}>
+                      {% with total_items=cart|length %}
+                        {% if total_items > 0 %}
+                          <a href="{% url 'cart:cart_detail' %}">
+                              <i class="fas fa-shopping-cart"></i>
+                              {{ total_items }} place{{ total_items|pluralize }},
+                              ₽{{ cart.get_total_price }}
+                          </a>
+                        {% else %}
+                            <a href="{% url 'cart:cart_detail' %}">
+                           <i class="fas fa-shopping-cart"></i> 0 place, ₽0
+                            </a>
+                        {% endif %}
+                      {% endwith %}
                 </li>
             </ul>
         {% endif %}

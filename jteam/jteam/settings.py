@@ -36,6 +36,14 @@ ALLOWED_HOSTS = ['mysite.com', 'localhost', '127.0.0.1', '.jteam.ru']
 # Application definition
 
 INSTALLED_APPS = [
+    # мои приложения
+    'account.apps.AccountConfig',
+    'games.apps.GamesConfig',
+    'actions.apps.ActionsConfig',
+    'location.apps.LocationConfig',
+    'cart.apps.CartConfig',
+    'orders.apps.OrdersConfig',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -53,12 +61,6 @@ INSTALLED_APPS = [
     'easy_thumbnails',
     'debug_toolbar',
     'bootstrap5',
-
-    # мои приложения
-    'account.apps.AccountConfig',
-    'games.apps.GamesConfig',
-    'actions.apps.ActionsConfig',
-
 ]
 
 MIDDLEWARE = [
@@ -87,6 +89,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'social_django.context_processors.backends',
+                'cart.context_processors.cart',
             ],
         },
     },
@@ -152,6 +155,9 @@ STATIC_URL = 'static/'
 STATICFILES_DIR = [
     os.path.join(BASE_DIR, 'static')
 ]
+STATIC_ROOT = os.path.join(BASE_DIR, '/account/static')
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -162,10 +168,27 @@ LOGIN_REDIRECT_URL = 'dashboard'
 LOGOUT_REDIRECT_URL = 'login'
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+# Конфигурация сервера электронной почты
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# yandex
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'pafos.light@yandex.ru'
+EMAIL_HOST_PASSWORD = 'kzzjtnhuqvfekapn'
+EMAIL_USE_SSL = True
+
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+SERVER_EMAIL = EMAIL_HOST_USER
+EMAIL_ADMIN = EMAIL_HOST_USER
+ADMINS = [('pafos.light', 'pafos.light@yandex.ru')]
+
+# gmail
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_HOST_USER = 'pafos.light@gmail.com'
+# # EMAIL_HOST_PASSWORD = 'uhtv fcqx izlu ukkl'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
@@ -211,8 +234,6 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 # End django-crispy-forms
 
-STATIC_ROOT = os.path.join(BASE_DIR, '/account/static')
-
 # Для указания URL-адреса для модели добавляем в проект настроечный параметр
 ABSOLUTE_URL_OVERRIDES = {
     'auth.user': lambda u: reverse_lazy('user_detail',
@@ -230,3 +251,6 @@ INTERNAL_IPS = [
 REDIS_HOST = 'localhost'
 REDIS_PORT = 6379
 REDIS_DB = 0
+
+# ключ, который будет использоваться для хранения корзины в пользовательском сеансе.
+CART_SESSION_ID = 'cart'

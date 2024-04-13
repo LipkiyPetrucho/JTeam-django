@@ -25,7 +25,12 @@
       <span class="date">{{ action.created|timesince }} ago</span>
       <br />
       <a href="{{ user.get_absolute_url }}">
+        {% if user.first_name or user.last_name %}
         {{ user.first_name }}
+        {{ user.last_name }}
+        {% else %}
+        {{ user.username }}
+        {% endif %}
       </a>
       {{ action.verb }}
       {% if action.target %}
