@@ -175,7 +175,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_PORT = 465
 EMAIL_HOST_USER = 'pafos.light@yandex.ru'
-EMAIL_HOST_PASSWORD = 'kzzjtnhuqvfekapn'
+EMAIL_HOST_PASSWORD = ''
 EMAIL_USE_SSL = True
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
@@ -186,7 +186,7 @@ ADMINS = [('pafos.light', 'pafos.light@yandex.ru')]
 # gmail
 # EMAIL_HOST = 'smtp.gmail.com'
 # EMAIL_HOST_USER = 'pafos.light@gmail.com'
-# # EMAIL_HOST_PASSWORD = 'uhtv fcqx izlu ukkl'
+# # EMAIL_HOST_PASSWORD = ''
 # EMAIL_PORT = 587
 # EMAIL_USE_TLS = True
 
@@ -197,15 +197,15 @@ AUTHENTICATION_BACKENDS = [
     'social_core.backends.google.GoogleOAuth2',
 ]
 
-SOCIAL_AUTH_FACEBOOK_KEY = '825782365703290'
-SOCIAL_AUTH_FACEBOOK_SECRET = '651be8c1eedc4b90931c4bba0cb4b723'
+SOCIAL_AUTH_FACEBOOK_KEY = ''
+SOCIAL_AUTH_FACEBOOK_SECRET = ''
 SOCIAL_AUTH_FACEBOOK_SCOPE = [
     'email',
 ]
 
 # ИД клиента Google
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '735631628517-5bhqpep2o86pb1i2cvaid1sbo4nti1m8.apps.googleusercontent.com'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'    # Секрет клиента Google
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = ''
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = ''    # Секрет клиента Google
 
 SOCIAL_AUTH_PIPELINE = [
     'social_core.pipeline.social_auth.social_details',
