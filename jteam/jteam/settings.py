@@ -101,15 +101,24 @@ WSGI_APPLICATION = 'jteam.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'jteam',
+#         'USER': 'jteam',
+#         'PASSWORD': 'pifpaf',
+#     }
+# }
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'jteam',
-        'USER': 'jteam',
-        'PASSWORD': 'pifpaf',
+        'HOST': os.environ.get('DB_HOST'),
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASS'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -170,7 +179,9 @@ LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 
 # Конфигурация сервера электронной почты
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 # yandex
 EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_PORT = 465
@@ -182,6 +193,14 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 SERVER_EMAIL = EMAIL_HOST_USER
 EMAIL_ADMIN = EMAIL_HOST_USER
 ADMINS = [('pafos.light', 'pafos.light@yandex.ru')]
+
+# celery
+# CELERY_BROKER_URL = 'amqp://guest:guest@localhost'
+CELERY_BROKER_URL = 'redis://redis:6379/0'
+
+CELERY_ACCEPT_CONTENT = ['json']
+# CELERY_RESULT_BACKEND = 'db+sqlite:///results.sqlite'
+CELERY_TASK_SERIALIZER = 'json'
 
 # gmail
 # EMAIL_HOST = 'smtp.gmail.com'

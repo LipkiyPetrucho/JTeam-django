@@ -16,13 +16,13 @@ def order_create(request):
                                          place=item['place'],
                                          price=item['price'],
                                          quantity=item['quantity'])
-                # очистить корзину
-                cart.clear()
-                # запустить асинхронное задание
-                order_created.delay(order.id)
-                return render(request,
-                              'orders/order/created.html',
-                              {'order': order})
+            # очистить корзину
+            cart.clear()
+            # запустить асинхронное задание
+            order_created.delay(order.id)
+            return render(request,
+                          'orders/order/created.html',
+                          {'order': order})
     else:
         form = OrderCreateForm()
     return render(request,
